@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %} PlanIt Login {% endblock title %}
+{% block header %}{% endblock header %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center flex-column mx-auto p-5" style="margin-top: 5vh;">
+    <img src="{% static 'django_logo.png' %}" class="mb-3" alt="PlanIt Logo" style="width:60%">
+    <div class="w-50 d-flex flex-column p-5 shadow rounded" style="background-color: white;">
+    <form>
+        <div class="form-group mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Enter your email">
+        </div>
+        <div class="form-group mb-4">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Enter your password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
+        <div class="text-center mt-3">
+            <small class="text-muted">Don't have an account? <a href="#">Sign up</a></small>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock content %}
