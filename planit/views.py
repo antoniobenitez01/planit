@@ -18,7 +18,7 @@ def login_page(request):
         if user is not None:
             login(request, user)
             messages.success(request, f'Welcome back, {user.first_name or user.username}!')
-            next_url = request.GET.get('next','main')
+            next_url = request.GET.get('next','home')
             return redirect(next_url)
         else:
             messages.error(request, 'Invalid email/username or password.')
@@ -27,7 +27,7 @@ def login_page(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
-    return redirect('main')
+    return redirect('home')
 
 def singup_page(request):
     if request.user.is_authenticated:
@@ -73,7 +73,7 @@ def singup_page(request):
             
             login(request, user)
             messages.success(request, f'Welcome to Planit, {user.first_name}!')
-            return redirect('main')
+            return redirect('home')
             
         except Exception as e:
             messages.error(request, f'Error creating account: {str(e)}')
@@ -94,3 +94,7 @@ def create_event(request):
                 event=event,
                 image=image
             )
+
+@login_required
+def profile(request):
+    return render(request, "profile.html", { "user_obj": request.user })

@@ -7,7 +7,6 @@ label {
     color: rgb(153, 31, 0);
 }
 
-/* Snackbar Styles */
 .snackbar {
     visibility: hidden;
     min-width: 250px;
@@ -47,4 +46,11 @@ label {
 
 .snackbar.info {
     background-color: #17a2b8;
+}
+
+.profile-header {
+    background-color: rgb(153, 31, 0); 
+    color: white; 
+    border-top-left-radius: 1rem; 
+    border-top-right-radius: 1rem;
 }

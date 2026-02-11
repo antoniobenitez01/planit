@@ -3,50 +3,52 @@
 {% block title %} PlanIt Sign Up {% endblock title %}
 {% block header %}{% endblock header %}
 {% block content %}
-<div class="d-flex justify-content-center align-items-center flex-column mx-auto p-5">
-    <img src="{% static 'planit_logo.png' %}" class="mb-3" alt="PlanIt Logo" style="width:40%">
-    <div class="w-50 d-flex flex-column p-5 shadow rounded" style="background-color: rgb(255, 208, 0);">
-        <form method="POST" action="{% url 'signup' %}">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-md-6 form-group mb-3">
-                    <label for="first_name" class="form-label">First Name</label>
-                    <input type="text" class="form-control form-control-lg" id="first_name" name="first_name" placeholder="First Name" required>
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center flex-column mx-auto p-5">
+        <img src="{% static 'planit_logo.png' %}" class="mb-3" alt="PlanIt Logo" style="width:40%">
+        <div class="w-50 d-flex flex-column p-5 shadow rounded" style="background-color: rgb(255, 208, 0);">
+            <form method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control form-control-lg" id="first_name" name="first_name" placeholder="First Name" required>
+                    </div>
+                    <div class="col-md-6 form-group mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control form-control-lg" id="last_name" name="last_name" placeholder="Last Name" required>
+                    </div>
                 </div>
-                <div class="col-md-6 form-group mb-3">
-                    <label for="last_name" class="form-label">Last Name</label>
-                    <input type="text" class="form-control form-control-lg" id="last_name" name="last_name" placeholder="Last Name" required>
+                <div class="form-group mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Choose a username" required>
                 </div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Choose a username" required>
-            </div>
-            <div class="form-group mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-            <div class="form-group mb-3">
-                <label for="telephone" class="form-label">Telephone</label>
-                <input type="tel" class="form-control form-control-lg" id="telephone" name="telephone" placeholder="Enter your phone number">
-            </div>
-            <div class="form-group mb-3">
-                <label for="age" class="form-label">Age</label>
-                <input type="number" class="form-control form-control-lg" id="age" name="age" placeholder="Enter your age" min="1" max="120">
-            </div>
-            <div class="form-group mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Create a password" required>
-            </div>
-            <div class="form-group mb-4">
-                <label for="password_confirm" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control form-control-lg" id="password_confirm" name="password_confirm" placeholder="Confirm your password" required>
-            </div>
-            <button type="submit" class="btn btn-lg w-100 text-light" style="background-color:rgb(153, 31, 0)">Sign Up</button>
-            <div class="text-center mt-3">
-                <small class="text-muted">Already have an account? <a href="{% url 'login' %}">Login</a></small>
-            </div>
-        </form>
+                <div class="form-group mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="telephone" class="form-label">Telephone</label>
+                    <input type="tel" class="form-control form-control-lg" id="telephone" name="telephone" placeholder="Enter your phone number">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control form-control-lg" id="age" name="age" placeholder="Enter your age" min="1" max="120">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Create a password" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="password_confirm" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control form-control-lg" id="password_confirm" name="password_confirm" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="btn btn-lg w-100 text-light" style="background-color:rgb(153, 31, 0)">Sign Up</button>
+                <div class="text-center mt-3">
+                    <small class="text-muted">Already have an account? <a href="{% url 'login' %}">Login</a></small>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock content %}
