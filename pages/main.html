@@ -1,5 +1,19 @@
 {% extends 'index.html' %}
-{% block title %} PlanIt {% endblock title %}
+{% block title %} Planit {% endblock title %}
 {% block content %}
-<h1>This is the Main Page, Welcome</h1>
+<main class="container my-5">    
+    <div class="text-center">
+        <h1 class="display-4 mb-4">Welcome to PlanIt</h1>
+        {% if user.is_authenticated %}
+            <p class="lead">Hello {{ user.first_name|default:user.username }}, you are logged in!</p>
+            <p class="text-muted">Start planning your events and managing your schedule.</p>
+        {% else %}
+            <p class="lead">Plan your events and manage your schedule effortlessly.</p>
+            <div class="mt-4">
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-2">Login</a>
+                <a href="{% url 'signup' %}" class="btn btn-warning btn-lg">Sign Up</a>
+            </div>
+        {% endif %}
+    </div>
+</main>
 {% endblock content %}

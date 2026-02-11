@@ -1,10 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class AppUser(models.Model):
-    name = models.CharField (verbose_name="Name", max_length=50, default='')
-    last_name = models.CharField (verbose_name="Last Name", max_length=100, default='')
-    email = models.CharField (verbose_name="E-Mail", max_length=200, default='', unique=True)
-    password = models.CharField (verbose_name="Password", default='')
+class AppUser(AbstractUser):
+    username = models.CharField(max_length=150, unique=True, null=True, blank=True)  # Temporarily nullable
     telephone = models.CharField (verbose_name="Telephone Number", max_length=20, default='', unique=True)
     age = models.PositiveSmallIntegerField (verbose_name="Age", default=0)
     
@@ -13,7 +11,7 @@ class AppUser(models.Model):
         verbose_name_plural = "App Users"
         
     def __str__(self):
-        return f'{self.name} {self.last_name}'
+        return f'{self.first_name} {self.last_name}' if self.first_name else self.username
 
 class Event (models.Model):
     title = models.CharField (verbose_name="Title", max_length=100, default='')
@@ -43,6 +41,39 @@ class Event (models.Model):
     
     def __str__(self):
         return self.title
+    
+class EventImage(models.Model):
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='images',
+        verbose_name="Event"
+    )
+    image = models.ImageField(
+        upload_to='event_images/%Y/%m/%d/',
+        verbose_name="Image"
+    )
+    caption = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="Caption"
+    )
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Uploaded At"
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Display Order"
+    )
+    
+    class Meta:
+        verbose_name = "Event Image"
+        verbose_name_plural = "Event Images"
+        ordering = ['order', '-uploaded_at']
+    
+    def __str__(self):
+        return self.caption if self.caption else f"Image for {self.event.title}"
 
 class EventAttendance(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)

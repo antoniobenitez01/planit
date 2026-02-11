@@ -1,0 +1,50 @@
+body {
+    font-family: 'Roboto';
+}
+
+label {
+    font-weight: bold;
+    color: rgb(153, 31, 0);
+}
+
+/* Snackbar Styles */
+.snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    bottom: 30px;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: visibility 0s, opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.snackbar.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.snackbar.success {
+    background-color: #28a745;
+}
+
+.snackbar.error {
+    background-color: #dc3545;
+}
+
+.snackbar.warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.snackbar.info {
+    background-color: #17a2b8;
+}

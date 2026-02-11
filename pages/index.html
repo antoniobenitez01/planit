@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,38 +10,45 @@
         rel="stylesheet" 
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
         crossorigin="anonymous">
+    <link href="{% static 'styles.css' %}" rel="stylesheet">
     {% endblock css %}
 </head>
-<body class="container">
-
+<body>
     {% block header %}
     <header class="p-3 bg-dark text-white">
-        <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-            </a>
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="{% static 'planit_logo_white.png' %}" alt="Planit Logo" style="height: 40px; margin-right:2vw">
+                </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
+                </ul>
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                </form>
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-            <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
-            </form>
-
-            <div class="text-end">
-            <button type="button" class="btn btn-outline-light me-2">Login</button>
-            <button type="button" class="btn btn-warning">Sign-up</button>
+                <div class="text-end">
+                    {% if user.is_authenticated %}
+                        <span class="text-white me-3">Hello, {{ user.first_name|default:user.username }}!</span>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+                        <a href="{% url 'signup' %}" class="btn btn-warning">Sign-up</a>
+                    {% endif %}
+                </div>
             </div>
-        </div>
         </div>
     </header>
     {% endblock header %}
+
+    <div id="snackbar" class="snackbar" 
+        data-messages='[
+            {% for message in messages %}
+                {"message": "{{ message|escapejs }}", "tags": "{{ message.tags }}"}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]'>
+    </div>
 
     {% block content %}
     {% endblock content %}
@@ -48,7 +56,7 @@
     {% block footer %}
     <footer class="page-footer font-small blue">
         <div class="footer-copyright text-center py-3 color-corporativo">© {{yyyy}} Copyright:
-            <a href="https://google.es/" target="_blank" class="color-corporativo-azul"> PlanIt</a>
+            <a href="https://google.es/" target="_blank" class="color-corporativo-azul"> Planit</a>
             - Antonio Benítez (2026)
         </div>
     </footer>
@@ -59,6 +67,7 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
         crossorigin="anonymous">
     </script>
+    <script src="{% static 'scripts.js' %}"></script>
     {% endblock js %}
 </body>
 </html>
