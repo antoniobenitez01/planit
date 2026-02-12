@@ -4,49 +4,94 @@
 {% block title %} My Profile {% endblock title %}
 {% block content %}
 <div class="container py-5">
-    <div class="col-lg-8">
-        <div class="card shadow-lg border-0 rounded-4">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
 
-            <!-- HEADER -->
-            <div class="card-body text-center p-5 profile-header">
-                <i class="bi bi-person-circle display-1"></i>
-                <h3 class="mt-3 mb-0">
-                    {% if user_obj.first_name or user_obj.last_name %}
-                        {{ user_obj.first_name }} {{ user_obj.last_name }}
-                    {% else %}
-                        {{ user_obj.username }}
-                    {% endif %}
-                </h3>
-                <p class="mb-0">@{{ user_obj.username }}</p>
+                <!-- HEADER -->
+                <div class="card-body text-center p-5 profile-header" style="background-color:rgb(153, 31, 0)">
+                    <i class="bi bi-person-circle display-1 text-white"></i>
+                    <h3 class="mt-3 mb-0">
+                        {% if user_obj.first_name or user_obj.last_name %}
+                            {{ user_obj.first_name }} {{ user_obj.last_name }}
+                        {% else %}
+                            {{ user_obj.username }}
+                        {% endif %}
+                    </h3>
+                    <p class="text-light mb-0">@{{ user_obj.username|default:"No username" }}</p>
+                </div>
+                <!-- /HEADER -->
+
+                <!-- BODY -->
+                <div class="card-body p-4">
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">First Name</div>
+                        <div class="col-sm-8 text-muted">
+                            {{ user_obj.first_name|default:"Not provided" }}
+                        </div>
+                    </div>
+                    <hr>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Last Name</div>
+                        <div class="col-sm-8 text-muted">
+                            {{ user_obj.last_name|default:"Not provided" }}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Email</div>
+                        <div class="col-sm-8 text-muted">
+                            {{ user_obj.email|default:"Not provided" }}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Telephone</div>
+                        <div class="col-sm-8 text-muted">
+                            {{ user_obj.telephone|default:"Not provided" }}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Age</div>
+                        <div class="col-sm-8 text-muted">
+                            {% if user_obj.age > 0 %}
+                                {{ user_obj.age }}
+                            {% else %}
+                                Not provided
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Member Since</div>
+                        <div class="col-sm-8 text-muted">
+                            {{ user_obj.date_joined|date:"F j, Y" }}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4 fw-semibold">Last Login</div>
+                        <div class="col-sm-8 text-muted">
+                            {% if user_obj.last_login %}
+                                {{ user_obj.last_login|date:"F j, Y, g:i a" }}
+                            {% else %}
+                                Never
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /BODY -->
+                 
             </div>
-            <!-- /BODY -->
-
-            <!-- BODY -->
-            <div class="card-body p-4">
-
-                <div class="row mb-3">
-                    <div class="col-sm-4 fw-semibold">Email</div>
-                    <div class="col-sm-8 text-muted">
-                        {{ user_obj.email|default:"Not provided" }}
-                    </div>
-                </div>
-                <hr>
-                <div class="row mb-3">
-                    <div class="col-sm-4 fw-semibold">Age</div>
-                    <div class="col-sm-8 text-muted">
-                        {{ user_obj.age }}
-                    </div>
-                </div>
-                <hr>
-                <div class="row mb-4">
-                    <div class="col-sm-4 fw-semibold">Member Since</div>
-                    <div class="col-sm-8 text-muted">
-                        {{ user_obj.date_joined|date:"F j, Y" }}
-                    </div>
-                </div>
-            </div>
-            <!-- /BODY -->
-             
         </div>
     </div>
 </div>

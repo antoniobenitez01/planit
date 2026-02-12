@@ -1,0 +1,114 @@
+{% extends 'index.html' %}
+{% block title %} Planit {% endblock title %}
+{% block content %}
+
+<div class="bg-light py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-3">Welcome to Planit</h1>
+        <p class="lead text-muted mb-4">Discover and join amazing events in your community</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'create_event' %}" class="btn btn-warning btn-lg">
+                <i class="bi bi-calendar-plus me-2"></i>
+                Create Your Event
+            </a>
+        {% else %}
+            <a href="{% url 'signup' %}" class="btn btn-warning btn-lg me-2">
+                <i class="bi bi-person-plus me-2"></i>
+                Sign Up
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<main class="container my-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold mb-3">
+                <i class="bi bi-calendar-event me-2" style="color: rgb(153, 31, 0);"></i>
+                Upcoming Events
+            </h2>
+            <p class="text-muted">Browse all available events and find something you'll love</p>
+        </div>
+    </div>
+
+    {% if events_data %}
+    <div class="row g-4">
+        {% for data in events_data %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-lift">
+                <div class="position-relative" style="height: 200px; overflow: hidden;">
+                    {% if data.event.images.first %}
+                        <img src="{{ data.event.images.first.image.url }}" 
+                            class="card-img-top w-100 h-100" 
+                            style="object-fit: cover;" 
+                            alt="{{ data.event.title }}">
+                    {% else %}
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+                            <i class="bi bi-calendar-event display-1 text-muted"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="position-absolute top-0 end-0 m-3">
+                        {% if data.slots_available > 0 %}
+                            <span class="badge bg-success">{{ data.slots_available }} slots left</span>
+                        {% else %}
+                            <span class="badge bg-danger">Full</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold mb-2">{{ data.event.title }}</h5>
+                    
+                    <p class="card-text text-muted small mb-3" style="flex-grow: 1;">
+                        {{ data.event.description|truncatewords:20 }}
+                    </p>
+
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-calendar3 me-2" style="color: rgb(153, 31, 0);"></i>
+                            <small class="text-muted">{{ data.event.date_start|date:"M d, Y - g:i A" }}</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-geo-alt me-2" style="color: rgb(153, 31, 0);"></i>
+                            <small class="text-muted">{{ data.event.location|truncatewords:5 }}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person me-2" style="color: rgb(153, 31, 0);"></i>
+                            <small class="text-muted">By {{ data.event.creator }}</small>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'event_detail' data.event.pk %}" class="btn btn-outline-primary w-100 mt-auto">
+                        <i class="bi bi-arrow-right-circle me-2"></i>
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
+        <h3 class="text-muted">No Events Yet</h3>
+        <p class="text-muted mb-4">Be the first to create an event!</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'create_event' %}" class="btn btn-warning btn-lg">
+                <i class="bi bi-calendar-plus me-2"></i>
+                Create First Event
+            </a>
+        {% else %}
+            <a href="{% url 'signup' %}" class="btn btn-warning btn-lg">
+                <i class="bi bi-person-plus me-2"></i>
+                Sign Up to Create Events
+            </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</main>
+
+{% endblock content %}

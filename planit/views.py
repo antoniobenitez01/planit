@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import AppUser, Event, EventImage
+from .models import AppUser, Event, EventImage, EventAttendance
 
 def login_page(request):
     if request.user.is_authenticated:
@@ -80,21 +80,108 @@ def singup_page(request):
     
     return render(request, 'signup.html')
 
-def main_page(request):
-    return render(request, 'main.html')
+def home(request):
+    events = Event.objects.all().order_by('-date_start')
+    
+    events_data = []
+    for event in events:
+        attendees_count = event.attendees.count()
+        slots_available = event.slots - attendees_count
+        events_data.append({
+            'event': event,
+            'slots_available': slots_available,
+            'attendees_count': attendees_count,
+        })
+    
+    return render(request, 'home.html', {'events_data': events_data})
 
+@login_required
 def create_event(request):
     if request.method == 'POST':
+
         event = Event.objects.create(
-            title=request.POST['title'],
-            creator=request.user,
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            location=request.POST.get('location'),
+            slots=request.POST.get('slots'),
+            date_start=request.POST.get('date_start'),
+            creator=request.user
         )
-        for image in request.FILES.getlist('images'):
+        
+        images = request.FILES.getlist('images')
+        for index, image in enumerate(images):
+            caption = request.POST.get(f'caption_{index}', '')
             EventImage.objects.create(
                 event=event,
-                image=image
+                image=image,
+                caption=caption,
+                order=index
             )
+        
+        messages.success(request, f'Event "{event.title}" created successfully!')
+        return redirect('event_detail', pk=event.pk) 
+    
+    return render(request, 'create_event.html')
 
 @login_required
 def profile(request):
-    return render(request, "profile.html", { "user_obj": request.user })
+    created_events = request.user.created_events.all().order_by('-date_created')
+    attending_events = request.user.attending_events.all().order_by('date_start')
+    
+    context = {
+        'user_obj': request.user,
+        'created_events': created_events,
+        'attending_events': attending_events,
+    }
+    return render(request, "profile.html", context)
+
+def event_detail(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    attendees = event.attendees.all()
+    attendees_count = attendees.count()
+    slots_available = event.slots - attendees_count
+    
+    is_attending = False
+    is_creator = False
+    if request.user.is_authenticated:
+        is_attending = attendees.filter(pk=request.user.pk).exists()
+        is_creator = event.creator == request.user
+    
+    context = {
+        'event': event,
+        'attendees': attendees,
+        'attendees_count': attendees_count,
+        'slots_available': slots_available,
+        'is_attending': is_attending,
+        'is_creator': is_creator,
+    }
+    return render(request, 'event_detail.html', context)
+
+@login_required
+def attend_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    
+    if event.creator == request.user:
+        messages.error(request, "You cannot attend your own event.")
+        return redirect('event_detail', pk=pk)
+    
+    if event.attendees.filter(pk=request.user.pk).exists():
+        messages.warning(request, "You are already attending this event.")
+        return redirect('event_detail', pk=pk)
+    
+    attendees_count = event.attendees.count()
+    if attendees_count >= event.slots:
+        messages.error(request, "This event is full. No slots available.")
+        return redirect('event_detail', pk=pk)
+    
+    EventAttendance.objects.create(event=event, user=request.user)
+    messages.success(request, f"You are now attending '{event.title}'!")
+    return redirect('event_detail', pk=pk)
+
+@login_required
+def cancel_attendance(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    
+    EventAttendance.objects.filter(event=event, user=request.user).delete()
+    messages.success(request, f"You have cancelled your attendance for '{event.title}'.")
+    return redirect('event_detail', pk=pk)
