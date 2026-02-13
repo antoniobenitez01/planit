@@ -3,13 +3,19 @@
 {% block title %} Registro - Planit {% endblock title %}
 {% block header %}{% endblock header %}
 {% block content %}
-<div class="login-background" style="background: url('{% static "blurbg.jpg" %}'); min-height: 100vh; background-size: cover; display: flex; justify-content: center; align-items: center;">
-    <div class="login-card">
+<!-- DIV FONDO - Div para mostrar imágen de fondo -->
+<div style="background: url('{% static "blurbg.jpg" %}'); 
+    min-height: 100vh; 
+    background-size: cover; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;">
+    <div class="login-card text-center" style="min-width: 750px">
 
         <div class="text-center mb-4">
             <img src="{% static 'planit_logo_color2.png' %}" 
                  class="login-logo mb-3" 
-                 alt="PlanIt Logo">
+                 alt="Planit Logo">
         </div>
 
         <form method="POST" action="{% url 'signup' %}">
@@ -20,13 +26,13 @@
                     <label for="first_name" class="form-label">Nombre</label>
                     <input type="text" class="form-control form-control-lg" 
                            id="first_name" name="first_name" 
-                           placeholder="First Name" required>
+                           placeholder="Nombre" required>
                 </div>
                 <div class="col-md-6 form-group mb-3">
                     <label for="last_name" class="form-label">Apellido</label>
                     <input type="text" class="form-control form-control-lg" 
                            id="last_name" name="last_name" 
-                           placeholder="Last Name" required>
+                           placeholder="Apellido" required>
                 </div>
             </div>
 
@@ -34,42 +40,42 @@
                 <label for="username" class="form-label">Usuario</label>
                 <input type="text" class="form-control form-control-lg" 
                        id="username" name="username" 
-                       placeholder="Choose a username" required>
+                       placeholder="Usuario" required>
             </div>
 
             <div class="form-group mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control form-control-lg" 
                        id="email" name="email" 
-                       placeholder="Enter your email" required>
+                       placeholder="Introduzca su Email" required>
             </div>
 
             <div class="form-group mb-3">
                 <label for="telephone" class="form-label">Teléfono</label>
                 <input type="tel" class="form-control form-control-lg" 
                        id="telephone" name="telephone" 
-                       placeholder="Enter your phone number">
+                       placeholder="Introduzca su teléfono">
             </div>
 
             <div class="form-group mb-3">
                 <label for="age" class="form-label">Edad</label>
                 <input type="number" class="form-control form-control-lg" 
                        id="age" name="age" 
-                       placeholder="Enter your age" min="1" max="120">
+                       placeholder="Introduzca su Edad" min="1" max="120">
             </div>
 
             <div class="form-group mb-3">
                 <label for="password" class="form-label">Contraseña</label>
                 <input type="password" class="form-control form-control-lg" 
                        id="password" name="password" 
-                       placeholder="Create a password" required>
+                       placeholder="Crea una Contraseña" required>
             </div>
 
             <div class="form-group mb-4">
                 <label for="password_confirm" class="form-label">Confirmar Contraseña</label>
                 <input type="password" class="form-control form-control-lg" 
                        id="password_confirm" name="password_confirm" 
-                       placeholder="Confirm your password" required>
+                       placeholder="Confirme su Contraseña" required>
             </div>
 
             <button type="submit" 

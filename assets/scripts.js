@@ -1,3 +1,4 @@
+//  SHOW SNACKBAR - Código JavaScript para Mostrar un Snackbar con Mensaje
 function showSnackbar(message, type = 'info') {
     const snackbar = document.getElementById('snackbar');
     snackbar.textContent = message;
@@ -9,6 +10,7 @@ function showSnackbar(message, type = 'info') {
     }, 4000);
 }
 
+//  EVENT LISTENER - Crea un Listener para ejecutar SHOW SNACKBAR cuando se alerte
 document.addEventListener('DOMContentLoaded', function() {
     const snackbar = document.getElementById('snackbar');
     const messagesData = snackbar.getAttribute('data-messages');
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+//  IMAGE UPLOADER - Sube las Imágenes de Evento introducidas a su correspondiente directorio
 document.getElementById('id_images').addEventListener('change', function(e) {
     const files = e.target.files;
     const captionContainer = document.getElementById('caption-inputs');

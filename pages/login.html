@@ -3,8 +3,8 @@
 {% block title %} Login - Planit {% endblock title %}
 {% block header %}{% endblock header %}
 {% block content %}
-<div class="login-background" style="
-    background: url('{% static "blurbg.jpg" %}'); 
+<!-- DIV FONDO - Div para mostrar imágen de fondo -->
+<div style="background: url('{% static "blurbg.jpg" %}'); 
     min-height: 100vh; 
     background-size: cover; 
     display: flex; 
@@ -23,14 +23,14 @@
                 <label for="username" class="form-label">Usuario o Email</label>
                 <input type="text" class="form-control form-control-lg" 
                        id="username" name="username" 
-                       placeholder="Introduce tu Usuario o Email">
+                       placeholder="Introduzca su Usuario o Email">
             </div>
 
             <div class="form-group mb-4 text-start">
                 <label for="password" class="form-label">Contraseña</label>
                 <input type="password" class="form-control form-control-lg" 
                        id="password" name="password" 
-                       placeholder="Introduce tu contraseña">
+                       placeholder="Introduzca su contraseña">
             </div>
 
             <button type="submit" 

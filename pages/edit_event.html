@@ -3,6 +3,7 @@
 {% block title %} Editar Evento - Planit{{ event.title }} {% endblock title %}
 {% block header %}{% endblock header %}
 {% block content %}
+<!-- DIV FONDO - Div para mostrar imágen de fondo -->
 <div style="min-height: 100vh; 
     background: url('{% static "blurbg.jpg" %}');
     background-size: cover;
@@ -35,7 +36,7 @@
                                     maxlength="100" 
                                     class="form-control form-control-lg" 
                                     id="id_title" 
-                                    placeholder="Enter event title"
+                                    placeholder="Introduzca el Título del Evento"
                                     value="{{ event.title }}"
                                     required
                                 >
@@ -52,7 +53,7 @@
                                     class="form-control" 
                                     id="id_description" 
                                     rows="5" 
-                                    placeholder="Describe your event"
+                                    placeholder="Describe tu Evento"
                                     required
                                 >{{ event.description }}</textarea>
                                 <div class="form-text">Máximo 1000 caracteres</div>
@@ -69,7 +70,7 @@
                                     maxlength="200" 
                                     class="form-control" 
                                     id="id_location" 
-                                    placeholder="Event location or address"
+                                    placeholder="Ubicación del Evento"
                                     value="{{ event.location }}"
                                     required
                                 >
@@ -102,7 +103,7 @@
                                     min="0" 
                                     class="form-control" 
                                     id="id_slots" 
-                                    placeholder="Number of available slots"
+                                    placeholder="Número de Espacios Disponibles"
                                     value="{{ event.slots }}"
                                     required
                                 >

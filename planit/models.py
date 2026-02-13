@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+#   --- APPUSER - Clase de Usuario
+#   ---     Hereda de AbstractUser para hacer uso de sus funcionalidades
+#   ---     de Usuario en el sistema de Administración de Django
 class AppUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True, null=True, blank=True)  # Temporarily nullable
     telephone = models.CharField (verbose_name="Telephone Number", max_length=20, default='', unique=True)
@@ -13,6 +16,10 @@ class AppUser(AbstractUser):
     def __str__(self):
         return f'{self.first_name} {self.last_name}' if self.first_name else self.username
 
+#   --- EVENTO - Clase de Evento
+#   ---     Contiene referencias ForeignKey y ManyToManyField
+#   ---     en base al creador del Evento y a la gente que
+#   ---     asistirá al Evento
 class Event (models.Model):
     title = models.CharField (verbose_name="Title", max_length=100, default='')
     description = models.CharField (verbose_name="Description", max_length=1000, default='')
@@ -42,7 +49,10 @@ class Event (models.Model):
     def __str__(self):
         return self.title
     
-    
+#   --- EVENT IMAGE - Clase de Imagen de Evento
+#   ---     Creada con el propósito de facilitar
+#   ---     la subida y eliminación de imágenes
+#   ---     de las galerías de cada Evento
 class EventImage(models.Model):
     event = models.ForeignKey(
         Event,
@@ -76,6 +86,9 @@ class EventImage(models.Model):
     def __str__(self):
         return self.caption if self.caption else f"Image for {self.event.title}"
 
+#   --- EVENT ATTENDANCE - Clase auxiliar
+#   ---     Representa la relación que implica
+#   ---     asistir a un Evento junto a la fecha de registro
 class EventAttendance(models.Model):
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
