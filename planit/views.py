@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import AppUser, Event, EventImage, EventAttendance
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 
 def login_page(request):
     if request.user.is_authenticated:
@@ -44,6 +46,10 @@ def singup_page(request):
         telephone = request.POST.get('telephone', '')
         age = request.POST.get('age', 0)
         
+        if len(password) < 8:
+            messages.error(request, 'La Contraseña debe tener más de 8 caracteres.')
+            return render(request, 'signup.html')
+        
         if password != password_confirm:
             messages.error(request, 'Passwords do not match.')
             return render(request, 'signup.html')
@@ -82,7 +88,7 @@ def singup_page(request):
     return render(request, 'signup.html')
 
 def home(request):
-    events = Event.objects.all().order_by('-date_start')[:3]
+    events = Event.objects.all().order_by('-id')[:3]
     
     events_data = []
     for event in events:
@@ -126,13 +132,27 @@ def events_list(request):
 @login_required
 def create_event(request):
     if request.method == 'POST':
+        
+        date_start_str = request.POST.get('date_start')
+        date_start = parse_datetime(date_start_str)
+
+        if not date_start:
+            messages.error(request, "Invalid date format.")
+            return render(request, 'create_event.html')
+
+        if timezone.is_naive(date_start):
+            date_start = timezone.make_aware(date_start, timezone.get_current_timezone())
+
+        if date_start <= timezone.now():
+            messages.error(request, "The event date must be in the future.")
+            return render(request, 'create_event.html')
 
         event = Event.objects.create(
             title=request.POST.get('title'),
             description=request.POST.get('description'),
             location=request.POST.get('location'),
             slots=request.POST.get('slots'),
-            date_start=request.POST.get('date_start'),
+            date_start=date_start,
             creator=request.user
         )
         
@@ -149,7 +169,7 @@ def create_event(request):
         messages.success(request, f'Event "{event.title}" created successfully!')
         return redirect('event_detail', pk=event.pk) 
     
-    return render(request, 'create_event.html')
+    return render(request, 'create_event.html', {'now' : timezone.now()})
 
 @login_required
 def profile(request):
@@ -199,6 +219,7 @@ def profile_settings(request):
         confirm_password = request.POST.get('confirm_password', '')
         
         if current_password or new_password or confirm_password:
+            
             if not current_password:
                 messages.error(request, 'Please enter your current password to change it.')
                 return render(request, 'profile_settings.html')
@@ -304,11 +325,40 @@ def edit_event(request, pk):
         return redirect('event_detail', pk=pk)
     
     if request.method == 'POST':
+        
+        date_start_str = request.POST.get('date_start')
+        if not date_start_str:
+            messages.error(request, "Date is required.")
+            return render(request, 'edit_event.html', {'event': event, 'now': timezone.now()})
+
+        date_start = parse_datetime(date_start_str)
+
+        if not date_start:
+            messages.error(request, "Invalid date format.")
+            return render(request, 'edit_event.html', {'event': event, 'now': timezone.now()})
+
+        if timezone.is_naive(date_start):
+            date_start = timezone.make_aware(
+                date_start,
+                timezone.get_current_timezone()
+            )
+
+        if date_start <= timezone.now():
+            messages.error(request, "The event date must be in the future.")
+            return render(request, 'edit_event.html', {'event': event, 'now': timezone.now()})
+        
+        attendees_count = event.attendees.count()
+        new_slots = int(request.POST.get('slots'))
+        
+        if new_slots < attendees_count:
+            messages.error(request, f'Espacios disponibles no puede ser menor que el número de gente asistiendo.')
+            return render(request, 'edit_event.html', {'event': event, 'now': timezone.now()})
+        
         event.title = request.POST.get('title')
         event.description = request.POST.get('description')
         event.location = request.POST.get('location')
         event.slots = request.POST.get('slots')
-        event.date_start = request.POST.get('date_start')
+        event.date_start = date_start
         event.save()
         
         images = request.FILES.getlist('images')
@@ -325,11 +375,7 @@ def edit_event(request, pk):
         
         messages.success(request, f'Event "{event.title}" updated successfully!')
         return redirect('event_detail', pk=event.pk)
-    
-    context = {
-        'event': event,
-    }
-    return render(request, 'edit_event.html', context)
+    return render(request, 'edit_event.html', {'event': event, 'now' : timezone.now()})
 
 @login_required
 def delete_event_image(request, pk, image_id):

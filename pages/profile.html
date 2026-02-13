@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 
-{% block title %} My Profile {% endblock title %}
+{% block title %} Perfil - Planit {% endblock title %}
 {% block content %}
 <div class="container py-5">
     <div class="row g-4">
@@ -23,7 +23,7 @@
                 <div class="card-body p-4">
 
                     <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">First Name</div>
+                        <div class="col-sm-4 fw-semibold">Nombre</div>
                         <div class="col-sm-8 text-muted">
                             {{ user_obj.first_name|default:"Not provided" }} {{ user_obj.last_name|default:"" }}
                         </div>
@@ -31,7 +31,7 @@
                     <hr>
                     
                     <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Last Name</div>
+                        <div class="col-sm-4 fw-semibold">Apellido</div>
                         <div class="col-sm-8 text-muted">
                             {{ user_obj.last_name|default:"Not provided" }}
                         </div>
@@ -47,7 +47,7 @@
                     <hr>
 
                     <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Telephone</div>
+                        <div class="col-sm-4 fw-semibold">Teléfono</div>
                         <div class="col-sm-8 text-muted">
                             {{ user_obj.telephone|default:"Not provided" }}
                         </div>
@@ -55,7 +55,7 @@
                     <hr>
 
                     <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Age</div>
+                        <div class="col-sm-4 fw-semibold">Edad</div>
                         <div class="col-sm-8 text-muted">
                             {% if user_obj.age > 0 %}
                                 {{ user_obj.age }}
@@ -67,7 +67,7 @@
                     <hr>
 
                     <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Member Since</div>
+                        <div class="col-sm-4 fw-semibold">Miembro Desde</div>
                         <div class="col-sm-8 text-muted">
                             {{ user_obj.date_joined|date:"F j, Y" }}
                         </div>
@@ -75,12 +75,12 @@
                     <hr>
 
                     <div class="row mb-3">
-                        <div class="col-sm-4 fw-semibold">Last Login</div>
+                        <div class="col-sm-4 fw-semibold">Último Login</div>
                         <div class="col-sm-8 text-muted">
                             {% if user_obj.last_login %}
                                 {{ user_obj.last_login|date:"F j, Y, g:i a" }}
                             {% else %}
-                                Never
+                                Nunca
                             {% endif %}
                         </div>
                     </div>
@@ -96,9 +96,9 @@
                 <div class="card-header p-4" style="background-color:rgb(153, 31, 0); border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
                     <h4 class="mb-0 text-white">
                         <i class="bi bi-calendar-check me-2"></i>
-                        My Created Events
+                        Mis Eventos
                     </h4>
-                    <p class="text-light mb-0 small">Events you've organized ({{ created_events.count }})</p>
+                    <p class="text-light mb-0 small">Eventos que has organizado ({{ created_events.count }})</p>
                 </div>
 
                 <div class="card-body p-4" style="overflow-y: auto; max-height: 600px;">
@@ -124,9 +124,9 @@
                                                 <div class="position-absolute top-0 end-0 m-2">
                                                     {% with attendees_count=event.attendees.count slots_available=event.slots|add:"-"|add:event.attendees.count %}
                                                     {% if event.slots > event.attendees.count %}
-                                                        <span class="badge bg-success small">Active</span>
+                                                        <span class="badge bg-success small">Activo</span>
                                                     {% else %}
-                                                        <span class="badge bg-danger small">Full</span>
+                                                        <span class="badge bg-danger small">Lleno</span>
                                                     {% endif %}
                                                     {% endwith %}
                                                 </div>
@@ -152,13 +152,13 @@
                                                     </div>
                                                     <div class="d-flex align-items-center">
                                                         <i class="bi bi-people me-2 small" style="color: rgb(153, 31, 0);"></i>
-                                                        <small class="text-muted">{{ event.attendees.count }}/{{ event.slots }} attendees</small>
+                                                        <small class="text-muted">{{ event.attendees.count }}/{{ event.slots }} asistirán</small>
                                                     </div>
                                                 </div>
 
                                                 <a href="{% url 'event_detail' event.pk %}" class="btn btn-sm btn-outline-danger w-100">
                                                     <i class="bi bi-arrow-right-circle me-1"></i>
-                                                    View Details
+                                                    Ver detalles
                                                 </a>
                                             </div>
                                         </div>
@@ -170,11 +170,11 @@
                     {% else %}
                         <div class="text-center py-5">
                             <i class="bi bi-calendar-x display-4 text-muted mb-3"></i>
-                            <h5 class="text-muted mb-3">No Events Created Yet</h5>
-                            <p class="text-muted mb-4">Start organizing events and they'll appear here!</p>
+                            <h5 class="text-muted mb-3">No tienes Eventos</h5>
+                            <p class="text-muted mb-4">¡Anímate a organizar un Evento hoy!</p>
                             <a href="{% url 'create_event' %}" class="btn btn-warning">
                                 <i class="bi bi-calendar-plus me-2"></i>
-                                Create Your First Event
+                                Crear tu primer Evento
                             </a>
                         </div>
                     {% endif %}
@@ -191,9 +191,9 @@
                 <div class="card-header p-4" style="background-color:rgb(153, 31, 0); border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
                     <h4 class="mb-0 text-white">
                         <i class="bi bi-ticket-perforated me-2"></i>
-                        Events I'm Attending
+                        Eventos a Asistir
                     </h4>
-                    <p class="text-light mb-0 small">Events you've registered for ({{ attending_events.count }})</p>
+                    <p class="text-light mb-0 small">Eventos a los que Asistirás ({{ attending_events.count }})</p>
                 </div>
                 
                 <div class="card-body p-4">
@@ -235,7 +235,7 @@
 
                                     <a href="{% url 'event_detail' event.pk %}" class="btn btn-sm btn-outline-danger w-100">
                                         <i class="bi bi-arrow-right-circle me-1"></i>
-                                        View Details
+                                        Ver detalles
                                     </a>
                                 </div>
                             </div>
@@ -245,11 +245,11 @@
                     {% else %}
                     <div class="text-center py-5">
                         <i class="bi bi-ticket-perforated display-4 text-muted mb-3"></i>
-                        <h5 class="text-muted mb-3">Not Attending Any Events Yet</h5>
-                        <p class="text-muted mb-4">Browse available events and join the ones that interest you!</p>
+                        <h5 class="text-muted mb-3">No vas a Asistir a ningún Evento</h5>
+                        <p class="text-muted mb-4">¡ Anímate a descubrir un evento al que desees asistir !</p>
                         <a href="{% url 'events_list' %}" class="btn btn-warning">
                             <i class="bi bi-list-ul me-2"></i>
-                            Browse Events
+                            Buscar Eventos
                         </a>
                     </div>
                     {% endif %}

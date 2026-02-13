@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
-{% block title %} All Events - Planit {% endblock title %}
+{% block title %} Lista de Eventos - Planit {% endblock title %}
 {% block content %}
 
 <div class="bg-light py-4 mb-4">
@@ -9,9 +9,9 @@
             <div class="col-lg-6">
                 <h1 class="display-5 fw-bold mb-2">
                     <i class="bi bi-calendar-event me-2" style="color: rgb(153, 31, 0);"></i>
-                    All Events
+                    Lista de Eventos
                 </h1>
-                <p class="text-muted mb-0">Discover and join events in your community</p>
+                <p class="text-muted mb-0">Explora todos los eventos disponibles y descubre nuevas oportunidades</p>
             </div>
             <div class="col-lg-6">
                 <form method="get" action="{% url 'events_list' %}">
@@ -20,15 +20,15 @@
                             type="text" 
                             name="search" 
                             class="form-control form-control-lg" 
-                            placeholder="Search events..." 
+                            placeholder="Buscar Eventos..." 
                             value="{{ search_query|default:'' }}"
-                            aria-label="Search events"
+                            aria-label="Buscar Eventos"
                         >
                         <button class="btn btn-lg text-white" type="submit" style="background-color: rgb(153, 31, 0);">
                             <i class="bi bi-search"></i>
                         </button>
                         {% if search_query %}
-                        <a href="{% url 'events_list' %}" class="btn btn-outline-secondary btn-lg" title="Clear search">
+                        <a href="{% url 'events_list' %}" class="btn btn-outline-secondary btn-lg" title="Limpiar Búsqueda">
                             <i class="bi bi-x-lg"></i>
                         </a>
                         {% endif %}
@@ -44,11 +44,11 @@
     {% if search_query %}
     <div class="alert alert-info mb-4" role="alert">
         <i class="bi bi-info-circle me-2"></i>
-        Showing results for: <strong>"{{ search_query }}"</strong>
+        Resultados de: <strong>"{{ search_query }}"</strong>
         {% if events_data %}
-            ({{ events_data|length }} event{{ events_data|length|pluralize }} found)
+            ({{ events_data|length }} evento{{ events_data|length|pluralize }} encontrado)
         {% else %}
-            (No events found)
+            (Eventos no Encontrados)
         {% endif %}
     </div>
     {% endif %}
@@ -72,9 +72,9 @@
                     
                     <div class="position-absolute top-0 end-0 m-3">
                         {% if data.slots_available > 0 %}
-                            <span class="badge bg-success">{{ data.slots_available }} slots left</span>
+                            <span class="badge bg-success">{{ data.slots_available }} espacios disponibles</span>
                         {% else %}
-                            <span class="badge bg-danger">Full</span>
+                            <span class="badge bg-danger">Lleno</span>
                         {% endif %}
                     </div>
                 </div>
@@ -97,13 +97,13 @@
                         </div>
                         <div class="d-flex align-items-center">
                             <i class="bi bi-person me-2" style="color: rgb(153, 31, 0);"></i>
-                            <small class="text-muted">By {{ data.event.creator }}</small>
+                            <small class="text-muted">Por {{ data.event.creator }}</small>
                         </div>
                     </div>
 
                     <a href="{% url 'event_detail' data.event.pk %}" class="btn btn-outline-danger w-100 mt-auto">
                         <i class="bi bi-arrow-right-circle me-2"></i>
-                        View Details
+                        Ver detalles
                     </a>
                 </div>
             </div>
@@ -114,27 +114,27 @@
         {% if search_query %}
         <div class="text-center py-5">
             <i class="bi bi-search display-1 text-muted mb-3"></i>
-            <h3 class="text-muted">No Events Found</h3>
-            <p class="text-muted mb-4">We couldn't find any events matching "{{ search_query }}"</p>
+            <h3 class="text-muted">Eventos no Encontrados</h3>
+            <p class="text-muted mb-4">No hemos podido encontrar Eventos sobre "{{ search_query }}"</p>
             <a href="{% url 'events_list' %}" class="btn btn-primary">
                 <i class="bi bi-arrow-left me-2"></i>
-                View All Events
+                Ver Todos los Eventos
             </a>
         </div>
         {% else %}
         <div class="text-center py-5">
             <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
-            <h3 class="text-muted">No Events Yet</h3>
-            <p class="text-muted mb-4">Be the first to create an event!</p>
+            <h3 class="text-muted">No hay Eventos disponibles</h3>
+            <p class="text-muted mb-4">¡ Anímate a ser el primero en hacer un Evento !</p>
             {% if user.is_authenticated %}
                 <a href="{% url 'create_event' %}" class="btn btn-warning btn-lg">
                     <i class="bi bi-calendar-plus me-2"></i>
-                    Create First Event
+                    Crear Evento
                 </a>
             {% else %}
                 <a href="{% url 'signup' %}" class="btn btn-warning btn-lg">
                     <i class="bi bi-person-plus me-2"></i>
-                    Sign Up to Create Events
+                    Regístrate para Crear Eventos
                 </a>
             {% endif %}
         </div>

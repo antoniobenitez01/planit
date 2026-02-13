@@ -24,3 +24,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.getElementById('id_images').addEventListener('change', function(e) {
+    const files = e.target.files;
+    const captionContainer = document.getElementById('caption-inputs');
+    const captionSection = document.getElementById('image-captions');
+    
+    captionContainer.innerHTML = '';
+    
+    if (files.length > 0) {
+        captionSection.style.display = 'block';
+        
+        for (let i = 0; i < files.length; i++) {
+            const captionDiv = document.createElement('div');
+            captionDiv.className = 'mb-3';
+            captionDiv.innerHTML = `
+                <label class="form-label">Caption for ${files[i].name}</label>
+                <input 
+                    type="text" 
+                    name="caption_${i}" 
+                    maxlength="200" 
+                    class="form-control" 
+                    placeholder="Optional caption"
+                >
+            `;
+            captionContainer.appendChild(captionDiv);
+        }
+    } else {
+        captionSection.style.display = 'none';
+    }
+});

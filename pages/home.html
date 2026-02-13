@@ -5,17 +5,18 @@
 
 <div class="py-5 mb-5" style="background: url('{% static "blurbg.jpg" %}') center/cover no-repeat;">
     <div class="container text-center">
-        <img src="{% static 'planit_logo_white.png' %}" alt="Planit Logo" style="width:40%">
-        <p class="lead text-light mb-4">Discover and join amazing events in your community</p>
+        <img src="{% static 'planit_logo_white2.png' %}" alt="Planit Logo" style="width:45%" class="hover-scale">
+        <p class="lead text-light mb-4">Descubre increíbles reuniones y eventos cerca de tí</p>
+        <br>
         {% if user.is_authenticated %}
-            <a href="{% url 'create_event' %}" class="btn btn-warning btn-lg">
+            <a href="{% url 'create_event' %}" class="btn btn-warning btn-lg hover-lift-press">
                 <i class="bi bi-calendar-plus me-2"></i>
-                Create Your Event
+                Crear Evento
             </a>
         {% else %}
             <a href="{% url 'signup' %}" class="btn btn-danger btn-lg me-2">
                 <i class="bi bi-person-plus me-2"></i>
-                Sign Up
+                Registro
             </a>
             <a href="{% url 'login' %}" class="btn btn-warning btn-lg">
                 Login
@@ -29,14 +30,14 @@
         <div class="col-lg-8">
             <h2 class="fw-bold mb-3">
                 <i class="bi bi-calendar-event me-2" style="color: rgb(153, 31, 0);"></i>
-                Upcoming Events
+                Últimos Eventos
             </h2>
-            <p class="text-muted">Browse all available events and find something you'll love</p>
+            <p class="text-muted">Explora los eventos disponibles y descubre nuevas oportunidades</p>
         </div>
         <div class="col-lg-4 text-end">
             <a href="{% url 'events_list' %}" class="btn btn-outline-danger">
                 <i class="bi bi-list-ul me-2"></i>
-                View All Events
+                Todos los Eventos
             </a>
         </div>
     </div>
@@ -60,9 +61,9 @@
                     
                     <div class="position-absolute top-0 end-0 m-3">
                         {% if data.slots_available > 0 %}
-                            <span class="badge bg-success">{{ data.slots_available }} slots left</span>
+                            <span class="badge bg-success">{{ data.slots_available }} espacios restantes</span>
                         {% else %}
-                            <span class="badge bg-danger">Full</span>
+                            <span class="badge bg-danger">Lleno</span>
                         {% endif %}
                     </div>
                 </div>
@@ -85,13 +86,13 @@
                         </div>
                         <div class="d-flex align-items-center">
                             <i class="bi bi-person me-2" style="color: rgb(153, 31, 0);"></i>
-                            <small class="text-muted">By {{ data.event.creator }}</small>
+                            <small class="text-muted">Por {{ data.event.creator }}</small>
                         </div>
                     </div>
 
                     <a href="{% url 'event_detail' data.event.pk %}" class="btn btn-outline-danger w-100 mt-auto">
                         <i class="bi bi-arrow-right-circle me-2"></i>
-                        View Details
+                        Ver detalles
                     </a>
                 </div>
             </div>
@@ -101,17 +102,17 @@
     {% else %}
     <div class="text-center py-5">
         <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
-        <h3 class="text-muted">No Events Yet</h3>
-        <p class="text-muted mb-4">Be the first to create an event!</p>
+        <h3 class="text-muted">No hay Eventos disponibles</h3>
+        <p class="text-muted mb-4">¡ Anímate a ser el primero en hacer un Evento !</p>
         {% if user.is_authenticated %}
             <a href="{% url 'create_event' %}" class="btn btn-warning btn-lg">
                 <i class="bi bi-calendar-plus me-2"></i>
-                Create First Event
+                Crear Evento
             </a>
         {% else %}
             <a href="{% url 'signup' %}" class="btn btn-warning btn-lg">
                 <i class="bi bi-person-plus me-2"></i>
-                Sign Up to Create Events
+                Regístrate para Crear Eventos
             </a>
         {% endif %}
     </div>

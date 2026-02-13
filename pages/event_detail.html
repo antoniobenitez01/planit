@@ -4,9 +4,9 @@
 
 <div class="container py-5">
     <div class="mb-4">
-        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+        <a href="{% url 'events_list' %}" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left me-2"></i>
-            Back to Events
+            Volver a Eventos
         </a>
     </div>
 
@@ -33,11 +33,11 @@
                     {% if event.images.count > 1 %}
                     <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
+                        <span class="visually-hidden">Anterior</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
+                        <span class="visually-hidden">Siguiente</span>
                     </button>
                     {% endif %}
                 </div>
@@ -51,14 +51,14 @@
                     <h1 class="display-5 fw-bold mb-3">{{ event.title }}</h1>
                     <p class="text-muted mb-4">
                         <i class="bi bi-person-circle me-2"></i>
-                        Created by <strong>{{ event.creator }}</strong>
+                        Creado por <strong>{{ event.creator }}</strong>
                     </p>
                     <div class="row mb-4">
                         <div class="col-md-6 mb-3">
                             <div class="d-flex align-items-start">
                                 <i class="bi bi-calendar3 fs-4 me-3" style="color: rgb(153, 31, 0);"></i>
                                 <div>
-                                    <h6 class="fw-semibold mb-1">Date & Time</h6>
+                                    <h6 class="fw-semibold mb-1">Fecha y Hora</h6>
                                     <p class="text-muted mb-0">{{ event.date_start|date:"l, F d, Y" }}</p>
                                     <p class="text-muted">{{ event.date_start|date:"g:i A" }}</p>
                                 </div>
@@ -68,7 +68,7 @@
                             <div class="d-flex align-items-start">
                                 <i class="bi bi-geo-alt fs-4 me-3" style="color: rgb(153, 31, 0);"></i>
                                 <div>
-                                    <h6 class="fw-semibold mb-1">Location</h6>
+                                    <h6 class="fw-semibold mb-1">Ubicación</h6>
                                     <p class="text-muted mb-0">{{ event.location }}</p>
                                 </div>
                             </div>
@@ -77,11 +77,11 @@
                             <div class="d-flex align-items-start">
                                 <i class="bi bi-people fs-4 me-3" style="color: rgb(153, 31, 0);"></i>
                                 <div>
-                                    <h6 class="fw-semibold mb-1">Available Slots</h6>
+                                    <h6 class="fw-semibold mb-1">Espacios Disponibles</h6>
                                     {% if slots_available > 0 %}
-                                        <p class="text-success mb-0 fw-bold">{{ slots_available }} / {{ event.slots }} slots left</p>
+                                        <p class="text-success mb-0 fw-bold">{{ slots_available }} / {{ event.slots }} espacios restantes</p>
                                     {% else %}
-                                        <p class="text-danger mb-0 fw-bold">Event Full</p>
+                                        <p class="text-danger mb-0 fw-bold">Evento Lleno</p>
                                     {% endif %}
                                 </div>
                             </div>
@@ -90,15 +90,15 @@
                             <div class="d-flex align-items-start">
                                 <i class="bi bi-person-check fs-4 me-3" style="color: rgb(153, 31, 0);"></i>
                                 <div>
-                                    <h6 class="fw-semibold mb-1">Attendees</h6>
-                                    <p class="text-muted mb-0">{{ attendees_count }} attending</p>
+                                    <h6 class="fw-semibold mb-1">Asistentes</h6>
+                                    <p class="text-muted mb-0">{{ attendees_count }} asistiendo</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <hr class="my-4">
-                    <h4 class="fw-bold mb-3">About This Event</h4>
+                    <h4 class="fw-bold mb-3">Acerca de este Evento</h4>
                     <p class="text-muted" style="white-space: pre-line;">{{ event.description }}</p>
 
                     <hr class="my-4">
@@ -106,16 +106,16 @@
                         {% if is_creator %}
                             <div class="alert alert-info mb-3" role="alert">
                                 <i class="bi bi-info-circle me-2"></i>
-                                You are the creator of this event and cannot attend your own event.
+                                No puedes atender a un Evento que has creado tú.
                             </div>
                             <div class="d-grid gap-2">
                                 <a href="{% url 'edit_event' event.pk %}" class="btn btn-warning btn-lg">
                                     <i class="bi bi-pencil-square me-2"></i>
-                                    Edit Event
+                                    Editar Evento
                                 </a>
                                 <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteEventModal">
                                     <i class="bi bi-trash me-2"></i>
-                                    Delete Event
+                                    Eliminar Evento
                                 </button>
                             </div>
                         {% elif is_attending %}
@@ -123,7 +123,7 @@
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger btn-lg w-100">
                                     <i class="bi bi-x-circle me-2"></i>
-                                    Cancel Attendance
+                                    Cancelar Asistencia
                                 </button>
                             </form>
                         {% else %}
@@ -132,20 +132,20 @@
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-success btn-lg w-100">
                                         <i class="bi bi-check-circle me-2"></i>
-                                        Attend This Event
+                                        Asistir a este Evento
                                     </button>
                                 </form>
                             {% else %}
                                 <div class="alert alert-warning" role="alert">
                                     <i class="bi bi-exclamation-triangle me-2"></i>
-                                    This event is currently full. No slots available.
+                                    Este Evento está Lleno. No quedan espacios disponibles.
                                 </div>
                             {% endif %}
                         {% endif %}
                     {% else %}
                         <div class="alert alert-warning" role="alert">
                             <i class="bi bi-exclamation-triangle me-2"></i>
-                            Please <a href="{% url 'login' %}" class="alert-link">log in</a> to attend this event.
+                            Por favor <a href="{% url 'login' %}" class="alert-link">log in</a> para asistir a este Evento.
                         </div>
                     {% endif %}
                 </div>
@@ -156,7 +156,7 @@
                 <div class="card-header text-white text-center p-3 rounded-top-4" style="background-color: rgb(153, 31, 0);">
                     <h5 class="mb-0">
                         <i class="bi bi-people-fill me-2"></i>
-                        Attendees ({{ attendees_count }})
+                        Asistentes ({{ attendees_count }})
                     </h5>
                 </div>
                 <div class="card-body p-4">
@@ -165,8 +165,8 @@
                             {% for attendee in attendees %}
                             <div class="list-group-item px-0 py-3 border-bottom">
                                 <div class="d-flex align-items-center">
-                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" 
-                                         style="width: 45px; height: 45px; flex-shrink: 0;">
+                                    <div class="rounded-circle text-white d-flex align-items-center justify-content-center me-3" 
+                                         style="width: 45px; height: 45px; flex-shrink: 0;background-color: rgb(255, 208, 0);">
                                         <i class="bi bi-person-fill"></i>
                                     </div>
                                     <div>
@@ -186,8 +186,8 @@
                     {% else %}
                         <div class="text-center py-4">
                             <i class="bi bi-person-x display-4 text-muted mb-3"></i>
-                            <p class="text-muted">No attendees yet</p>
-                            <small class="text-muted">Be the first to join!</small>
+                            <p class="text-muted">Sin Asistentes</p>
+                            <small class="text-muted">¡ Anímate a ser el primero en asistir !</small>
                         </div>
                     {% endif %}
                 </div>
@@ -196,31 +196,31 @@
     </div>
 </div>
 
-<!-- Delete Event Confirmation Modal -->
 <div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="deleteEventModalLabel">
                     <i class="bi bi-exclamation-triangle me-2"></i>
-                    Delete Event
+                    Eliminar Evento
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-3">Are you sure you want to delete <strong>"{{ event.title }}"</strong>?</p>
+                <p class="mb-3">Está seguro de que desea eliminar <strong>"{{ event.title }}"</strong>?</p>
                 <div class="alert alert-warning mb-0">
                     <i class="bi bi-exclamation-triangle me-2"></i>
-                    <strong>Warning:</strong> This action cannot be undone. All event data, including attendees and images, will be permanently deleted.
+                    <strong>Advertencia:</strong> Está acción es irreversible. 
+                    Todos los datos del Evento, incluyendo las imágenes y asistentes, serán eliminados permanentemente.
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <form method="post" action="{% url 'delete_event' event.pk %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-trash me-2"></i>
-                        Delete Event
+                        Eliminar Evento
                     </button>
                 </form>
             </div>

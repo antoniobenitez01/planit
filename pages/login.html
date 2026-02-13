@@ -1,28 +1,59 @@
 {% extends 'index.html' %}
 {% load static %}
-{% block title %} PlanIt Login {% endblock title %}
+{% block title %} Login - Planit {% endblock title %}
 {% block header %}{% endblock header %}
 {% block content %}
-<div class="container">
-    <div class="d-flex justify-content-center align-items-center flex-column mx-auto p-5">
-        <img src="{% static 'planit_logo.png' %}" class="mb-3" alt="Planit Logo" style="width:40%">
-        <div class="w-50 d-flex flex-column p-5 shadow rounded" style="background-color: rgb(255, 208, 0);">
-            <form method="POST" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="form-group mb-3">
-                    <label for="username" class="form-label">Username or Email</label>
-                    <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Enter your Username or Email">
-                </div>
-                <div class="form-group mb-4">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Enter your password">
-                </div>
-                <button type="submit" class="btn btn-lg w-100 text-light" style="background-color:rgb(153, 31, 0)">Login</button>
-                <div class="text-center mt-3">
-                    <small class="text-muted">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></small>
-                </div>
-            </form>
-        </div>
+<div class="login-background" style="
+    background: url('{% static "blurbg.jpg" %}'); 
+    min-height: 100vh; 
+    background-size: cover; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;">
+    <div class="login-card text-center">
+
+        <img src="{% static 'planit_logo_color2.png' %}" 
+             class="mb-4 login-logo" 
+             alt="Planit Logo">
+
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="form-group mb-3 text-start">
+                <label for="username" class="form-label">Usuario o Email</label>
+                <input type="text" class="form-control form-control-lg" 
+                       id="username" name="username" 
+                       placeholder="Introduce tu Usuario o Email">
+            </div>
+
+            <div class="form-group mb-4 text-start">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control form-control-lg" 
+                       id="password" name="password" 
+                       placeholder="Introduce tu contraseña">
+            </div>
+
+            <button type="submit" 
+                    class="btn btn-lg w-100 text-light"
+                    style="background-color:rgb(153, 31, 0)">
+                Login
+            </button>
+
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    ¿No tienes cuenta? 
+                    <a href="{% url 'signup' %}" class="red-link">
+                        Regístrate aquí
+                    </a>
+                </small>
+            </div>
+
+        </form>
     </div>
 </div>
+<a href="{% url 'home' %}" class="btn btn-warning hover-scale-press" style="position: fixed; bottom:30px; right:30px">
+    <i class="bi bi-house-door me-1"></i>
+    Vuelve al Inicio
+</a>
 {% endblock content %}
+{% block footer %}{% endblock footer %}

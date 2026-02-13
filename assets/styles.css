@@ -64,7 +64,63 @@ label {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
+.hover-lift-press {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift-press:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.hover-lift-press:active {
+    transform: scale(0.95);
+}
+
+.hover-scale {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-scale-press {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-scale-press:hover {
+    transform: scale(1.05);
+}
+
+.hover-scale-press:active {
+    transform: scale(0.95);
+}
+
+.hover-scale-small {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-scale-small:hover {
+    transform: scale(1.025);
+}
+
 .red-link {
     color: red !important;
     text-decoration: none;
+}
+
+.login-card {
+    background-color: rgba(255, 208, 0, 0.95);
+    width: 100%;
+    max-width: 500px;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    margin-top: 10vh;
+    margin-bottom : 10vh
+}
+
+.login-logo {
+    width: 300px;
 }

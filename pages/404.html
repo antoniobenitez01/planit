@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 
-{% block title %} Page Not Found - Planit {% endblock title %}
+{% block title %} Página no Encontrada - Planit {% endblock title %}
 {% block content %}
 
 <div class="container">
@@ -14,27 +14,20 @@
                 
                 <h1 class="display-1 fw-bold mb-3" style="color: rgb(153, 31, 0);">404</h1>
 
-                <h2 class="h3 fw-bold mb-3">Page Not Found</h2>
+                <h2 class="h3 fw-bold mb-3">Página no Encontrada</h2>
                 <p class="text-muted lead mb-4">
-                    Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+                    ¡Oh no! La página que buscabas no existe o ha sido borrada o movida.
                 </p>
                 
                 <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                    <a href="{% url 'home' %}" class="btn btn-danger btn-lg px-4">
+                    <a href="{% url 'home' %}" class="btn btn-danger btn-lg px-4 hover-lift-press">
                         <i class="bi bi-house-door me-2"></i>
-                        Go to Home
+                        Volver a Home
                     </a>
-                    <a href="{% url 'events_list' %}" class="btn btn-outline-danger btn-lg px-4">
+                    <a href="{% url 'events_list' %}" class="btn btn-outline-danger btn-lg px-4 hover-lift-press">
                         <i class="bi bi-list-ul me-2"></i>
-                        Browse Events
+                        Buscar Eventos
                     </a>
-                </div>
-                
-                <div class="mt-5">
-                    <p class="text-muted small">
-                        If you believe this is an error, please 
-                        <a href="{% url 'home' %}" class="text-decoration-none" style="color: rgb(153, 31, 0);">contact support</a>.
-                    </p>
                 </div>
             </div>
         </div>
