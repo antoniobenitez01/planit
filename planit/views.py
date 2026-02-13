@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import AppUser, Event, EventImage, EventAttendance
 
 def login_page(request):
@@ -81,7 +82,7 @@ def singup_page(request):
     return render(request, 'signup.html')
 
 def home(request):
-    events = Event.objects.all().order_by('-date_start')
+    events = Event.objects.all().order_by('-date_start')[:3]
     
     events_data = []
     for event in events:
@@ -94,6 +95,33 @@ def home(request):
         })
     
     return render(request, 'home.html', {'events_data': events_data})
+
+def events_list(request):
+    search_query = request.GET.get('search', '').strip()
+    
+    if search_query:
+        events = Event.objects.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query)
+        ).order_by('-date_start')
+    else:
+        events = Event.objects.all().order_by('-date_start')
+    
+    events_data = []
+    for event in events:
+        attendees_count = event.attendees.count()
+        slots_available = event.slots - attendees_count
+        events_data.append({
+            'event': event,
+            'slots_available': slots_available,
+            'attendees_count': attendees_count,
+        })
+    
+    context = {
+        'events_data': events_data,
+        'search_query': search_query,
+    }
+    return render(request, 'events_list.html', context)
 
 @login_required
 def create_event(request):
@@ -134,6 +162,87 @@ def profile(request):
         'attending_events': attending_events,
     }
     return render(request, "profile.html", context)
+
+@login_required
+def profile_settings(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name', '')
+        last_name = request.POST.get('last_name', '')
+        email = request.POST.get('email')
+        telephone = request.POST.get('telephone', '')
+        age = request.POST.get('age', 0)
+        
+        if username != user.username and AppUser.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+            return render(request, 'profile_settings.html')
+        
+        if email != user.email and AppUser.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists.')
+            return render(request, 'profile_settings.html')
+        
+        if telephone and telephone != user.telephone and AppUser.objects.filter(telephone=telephone).exists():
+            messages.error(request, 'Telephone number already exists.')
+            return render(request, 'profile_settings.html')
+        
+        user.username = username
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.telephone = telephone
+        user.age = int(age) if age else 0
+        
+        current_password = request.POST.get('current_password', '')
+        new_password = request.POST.get('new_password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+        
+        if current_password or new_password or confirm_password:
+            if not current_password:
+                messages.error(request, 'Please enter your current password to change it.')
+                return render(request, 'profile_settings.html')
+            
+            if not user.check_password(current_password):
+                messages.error(request, 'Current password is incorrect.')
+                return render(request, 'profile_settings.html')
+            
+            if new_password != confirm_password:
+                messages.error(request, 'New passwords do not match.')
+                return render(request, 'profile_settings.html')
+            
+            if len(new_password) < 8:
+                messages.error(request, 'New password must be at least 8 characters long.')
+                return render(request, 'profile_settings.html')
+            
+            user.set_password(new_password)
+            messages.success(request, 'Profile updated successfully! Please log in again with your new password.')
+            user.save()
+            logout(request)
+            return redirect('login')
+        
+        user.save()
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('profile')
+    
+    return render(request, 'profile_settings.html')
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        password = request.POST.get('password')
+        
+        if user.check_password(password):
+            logout(request)
+            user.delete()
+            messages.success(request, 'Your account has been permanently deleted.')
+            return redirect('home')
+        else:
+            messages.error(request, 'Incorrect password. Account not deleted.')
+            return redirect('profile_settings')
+    
+    return redirect('profile_settings')
 
 def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
@@ -185,3 +294,72 @@ def cancel_attendance(request, pk):
     EventAttendance.objects.filter(event=event, user=request.user).delete()
     messages.success(request, f"You have cancelled your attendance for '{event.title}'.")
     return redirect('event_detail', pk=pk)
+
+@login_required
+def edit_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    
+    if event.creator != request.user:
+        messages.error(request, "You don't have permission to edit this event.")
+        return redirect('event_detail', pk=pk)
+    
+    if request.method == 'POST':
+        event.title = request.POST.get('title')
+        event.description = request.POST.get('description')
+        event.location = request.POST.get('location')
+        event.slots = request.POST.get('slots')
+        event.date_start = request.POST.get('date_start')
+        event.save()
+        
+        images = request.FILES.getlist('images')
+        if images:
+            current_max_order = event.images.count() # type: ignore
+            for index, image in enumerate(images):
+                caption = request.POST.get(f'caption_{index}', '')
+                EventImage.objects.create(
+                    event=event,
+                    image=image,
+                    caption=caption,
+                    order=current_max_order + index
+                )
+        
+        messages.success(request, f'Event "{event.title}" updated successfully!')
+        return redirect('event_detail', pk=event.pk)
+    
+    context = {
+        'event': event,
+    }
+    return render(request, 'edit_event.html', context)
+
+@login_required
+def delete_event_image(request, pk, image_id):
+    event = get_object_or_404(Event, pk=pk)
+    image = get_object_or_404(EventImage, pk=image_id, event=event)
+    
+    if event.creator != request.user:
+        messages.error(request, "You don't have permission to delete this image.")
+        return redirect('event_detail', pk=pk)
+    
+    image.delete()
+    messages.success(request, "Image deleted successfully!")
+    return redirect('edit_event', pk=pk)
+
+@login_required
+def delete_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    
+    if event.creator != request.user:
+        messages.error(request, "You don't have permission to delete this event.")
+        return redirect('event_detail', pk=pk)
+    
+    if request.method == 'POST':
+        event_title = event.title
+        event.delete()
+        messages.success(request, f'Event "{event_title}" has been deleted successfully.')
+        return redirect('home')
+    
+    return redirect('event_detail', pk=pk)
+
+def custom_404(request, exception):
+    """Custom 404 error handler"""
+    return render(request, '404.html', status=404)

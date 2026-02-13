@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %} Page Not Found - Planit {% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="col-lg-6 text-center">
+            <div class="error-content">
+                <div class="mb-4">
+                    <i class="bi bi-exclamation-triangle display-1" style="color: rgb(153, 31, 0); font-size: 8rem;"></i>
+                </div>
+                
+                <h1 class="display-1 fw-bold mb-3" style="color: rgb(153, 31, 0);">404</h1>
+
+                <h2 class="h3 fw-bold mb-3">Page Not Found</h2>
+                <p class="text-muted lead mb-4">
+                    Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+                </p>
+                
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="{% url 'home' %}" class="btn btn-danger btn-lg px-4">
+                        <i class="bi bi-house-door me-2"></i>
+                        Go to Home
+                    </a>
+                    <a href="{% url 'events_list' %}" class="btn btn-outline-danger btn-lg px-4">
+                        <i class="bi bi-list-ul me-2"></i>
+                        Browse Events
+                    </a>
+                </div>
+                
+                <div class="mt-5">
+                    <p class="text-muted small">
+                        If you believe this is an error, please 
+                        <a href="{% url 'home' %}" class="text-decoration-none" style="color: rgb(153, 31, 0);">contact support</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

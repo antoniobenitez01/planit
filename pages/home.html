@@ -1,22 +1,23 @@
 {% extends 'index.html' %}
+{% load static %}
 {% block title %} Planit {% endblock title %}
 {% block content %}
 
-<div class="bg-light py-5 mb-5">
+<div class="py-5 mb-5" style="background: url('{% static "blurbg.jpg" %}') center/cover no-repeat;">
     <div class="container text-center">
-        <h1 class="display-3 fw-bold mb-3">Welcome to Planit</h1>
-        <p class="lead text-muted mb-4">Discover and join amazing events in your community</p>
+        <img src="{% static 'planit_logo_white.png' %}" alt="Planit Logo" style="width:40%">
+        <p class="lead text-light mb-4">Discover and join amazing events in your community</p>
         {% if user.is_authenticated %}
             <a href="{% url 'create_event' %}" class="btn btn-warning btn-lg">
                 <i class="bi bi-calendar-plus me-2"></i>
                 Create Your Event
             </a>
         {% else %}
-            <a href="{% url 'signup' %}" class="btn btn-warning btn-lg me-2">
+            <a href="{% url 'signup' %}" class="btn btn-danger btn-lg me-2">
                 <i class="bi bi-person-plus me-2"></i>
                 Sign Up
             </a>
-            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">
+            <a href="{% url 'login' %}" class="btn btn-warning btn-lg">
                 Login
             </a>
         {% endif %}
@@ -25,12 +26,18 @@
 
 <main class="container my-5">
     <div class="row mb-4">
-        <div class="col">
+        <div class="col-lg-8">
             <h2 class="fw-bold mb-3">
                 <i class="bi bi-calendar-event me-2" style="color: rgb(153, 31, 0);"></i>
                 Upcoming Events
             </h2>
             <p class="text-muted">Browse all available events and find something you'll love</p>
+        </div>
+        <div class="col-lg-4 text-end">
+            <a href="{% url 'events_list' %}" class="btn btn-outline-danger">
+                <i class="bi bi-list-ul me-2"></i>
+                View All Events
+            </a>
         </div>
     </div>
 
@@ -82,7 +89,7 @@
                         </div>
                     </div>
 
-                    <a href="{% url 'event_detail' data.event.pk %}" class="btn btn-outline-primary w-100 mt-auto">
+                    <a href="{% url 'event_detail' data.event.pk %}" class="btn btn-outline-danger w-100 mt-auto">
                         <i class="bi bi-arrow-right-circle me-2"></i>
                         View Details
                     </a>

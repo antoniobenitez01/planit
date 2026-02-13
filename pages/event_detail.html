@@ -104,9 +104,19 @@
                     <hr class="my-4">
                     {% if user.is_authenticated %}
                         {% if is_creator %}
-                            <div class="alert alert-info" role="alert">
+                            <div class="alert alert-info mb-3" role="alert">
                                 <i class="bi bi-info-circle me-2"></i>
                                 You are the creator of this event and cannot attend your own event.
+                            </div>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'edit_event' event.pk %}" class="btn btn-warning btn-lg">
+                                    <i class="bi bi-pencil-square me-2"></i>
+                                    Edit Event
+                                </a>
+                                <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteEventModal">
+                                    <i class="bi bi-trash me-2"></i>
+                                    Delete Event
+                                </button>
                             </div>
                         {% elif is_attending %}
                             <form method="post" action="{% url 'cancel_attendance' event.pk %}">
@@ -181,6 +191,38 @@
                         </div>
                     {% endif %}
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Event Confirmation Modal -->
+<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteEventModalLabel">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Delete Event
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Are you sure you want to delete <strong>"{{ event.title }}"</strong>?</p>
+                <div class="alert alert-warning mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Warning:</strong> This action cannot be undone. All event data, including attendees and images, will be permanently deleted.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="{% url 'delete_event' event.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>
+                        Delete Event
+                    </button>
+                </form>
             </div>
         </div>
     </div>
