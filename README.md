@@ -126,6 +126,6 @@ python manage.py runserver
 
 <br>
 
-<p style="text-align: center;">
+<i style="text-align: center;">
 Planit es un Project de Código Abierto desarrollado en 2026 por Antonio Benítez Rodríguez <br>usando Django y Python, disponible en GitHub para uso personal y educativo.
-</p>
+</i>
