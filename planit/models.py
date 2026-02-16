@@ -27,6 +27,7 @@ class Event (models.Model):
     slots = models.PositiveIntegerField (verbose_name="Available Slots", default=0)
     date_created = models.DateTimeField(verbose_name="Date of Creation", auto_now_add=True)
     date_start = models.DateTimeField(verbose_name="Date of Event")
+    is_finished = models.BooleanField(default=False, verbose_name="Event Finished")
     
     creator = models.ForeignKey(
         AppUser,

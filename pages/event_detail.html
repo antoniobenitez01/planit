@@ -2,6 +2,12 @@
 {% block title %} {{ event.title }} - Planit {% endblock title %}
 {% block content %}
 
+{% if event.is_finished %}
+<div class="alert alert-secondary">
+    Este evento ha finalizado.
+</div>
+{% endif %}
+
 <div class="container py-5">
     <div class="mb-4">
         <a href="{% url 'events_list' %}" class="btn btn-outline-secondary">
@@ -104,11 +110,19 @@
                     <hr class="my-4">
                     {% if user.is_authenticated %}
                         {% if is_creator %}
+                            {% if not event.is_finished %}
                             <div class="alert alert-info mb-3" role="alert">
                                 <i class="bi bi-info-circle me-2"></i>
                                 No puedes atender a un Evento que has creado tú.
                             </div>
+                            {% else %}
+                            <div class="alert alert-info mb-3" role="alert">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Ya has marcado este Evento como finalizado.
+                            </div>
+                            {% endif %}
                             <div class="d-grid gap-2">
+                                {% if not event.is_finished %}
                                 <a href="{% url 'edit_event' event.pk %}" class="btn btn-warning btn-lg">
                                     <i class="bi bi-pencil-square me-2"></i>
                                     Editar Evento
@@ -117,8 +131,14 @@
                                     <i class="bi bi-trash me-2"></i>
                                     Eliminar Evento
                                 </button>
+                                <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#finishEventModal">
+                                    <i class="bi bi-flag me-2"></i>
+                                    Finalizar Evento
+                                </button>
+                                {% endif %}
                             </div>
                         {% elif is_attending %}
+                            {% if not event.is_finished %}
                             <form method="post" action="{% url 'cancel_attendance' event.pk %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger btn-lg w-100">
@@ -126,20 +146,27 @@
                                     Cancelar Asistencia
                                 </button>
                             </form>
+                            {% endif %}
                         {% else %}
-                            {% if slots_available > 0 %}
-                                <form method="post" action="{% url 'attend_event' event.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success btn-lg w-100">
-                                        <i class="bi bi-check-circle me-2"></i>
-                                        Asistir a este Evento
-                                    </button>
-                                </form>
+                            {% if event.is_finished %}
+                            <div class="alert alert-secondary" role="alert">
+                                Este evento ya no acepta asistentes.
+                            </div>
                             {% else %}
-                                <div class="alert alert-warning" role="alert">
-                                    <i class="bi bi-exclamation-triangle me-2"></i>
-                                    Este Evento está Lleno. No quedan espacios disponibles.
-                                </div>
+                                {% if slots_available > 0 %}
+                                    <form method="post" action="{% url 'attend_event' event.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-lg w-100">
+                                            <i class="bi bi-check-circle me-2"></i>
+                                            Asistir a este Evento
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        Este Evento está Lleno. No quedan espacios disponibles.
+                                    </div>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     {% else %}
@@ -221,6 +248,38 @@
                     <button type="submit" class="btn btn-danger">
                         <i class="bi bi-trash me-2"></i>
                         Eliminar Evento
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="finishEventModal" tabindex="-1" aria-labelledby="finishEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="finishEventModalLabel">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Finalizar Evento
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Está seguro de que desea eliminar <strong>"{{ event.title }}"</strong>?</p>
+                <div class="alert alert-warning mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Advertencia:</strong> Está acción es irreversible. 
+                    Una vez finalizado el Evento, no podrás editar sus datos ni eliminarlo.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="post" action="{% url 'finish_event' event.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>
+                        Finalizar Evento
                     </button>
                 </form>
             </div>

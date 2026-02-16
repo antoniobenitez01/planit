@@ -20,6 +20,7 @@ urlpatterns = [
     path('event/<int:pk>/cancel/', views.cancel_attendance, name='cancel_attendance'),                          #   CANCELAR ASISTENCIA
     path('event/<int:pk>/edit/', views.edit_event, name='edit_event'),                                          #   EDITAR EVENTO
     path('event/<int:pk>/delete/', views.delete_event, name='delete_event'),                                    #   ELIMINAR EVENTO
+    path('event/<int:pk>/finish/', views.finish_event, name='finish_event'),                                    #   FINALIZAR EVENTO
     path('event/<int:pk>/image/<int:image_id>/delete/', views.delete_event_image, name='delete_event_image'),   #   ELIMINAR IMAGEN EVENTO
     path('create_event',views.create_event, name='create_event'),                                               #   CREAR EVENTO
     path('admin/', admin.site.urls),                                                                            #   /!\ ADMIN

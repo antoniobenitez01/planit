@@ -214,6 +214,10 @@ def create_event(request):
 def attend_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
     
+    if event.is_finished:
+        messages.error(request, "Este Evento ya ha finalizado.")
+        return redirect('event_detail', pk=pk)
+    
     if event.creator == request.user:
         messages.error(request, "No puedes asistir a tu propio Evento.")
         return redirect('event_detail', pk=pk)
@@ -236,6 +240,10 @@ def attend_event(request, pk):
 def cancel_attendance(request, pk):
     event = get_object_or_404(Event, pk=pk)
     
+    if event.is_finished:
+        messages.error(request, "No se puede Cancelar la Asistencia de un Evento ya finalizado.")
+        return redirect('event_detail', pk=pk)
+    
     EventAttendance.objects.filter(event=event, user=request.user).delete()
     messages.success(request, f"Asistencia Cancelada para '{event.title}'.")
     return redirect('event_detail', pk=pk)
@@ -247,6 +255,10 @@ def edit_event(request, pk):
     
     if event.creator != request.user:
         messages.error(request, "No tienes permiso para editar este Evento.")
+        return redirect('event_detail', pk=pk)
+    
+    if event.is_finished:
+        messages.error(request, "No se puede editar un Evento finalizado.")
         return redirect('event_detail', pk=pk)
     
     if request.method == 'POST':
@@ -312,6 +324,10 @@ def delete_event_image(request, pk, image_id):
         messages.error(request, "No tienes permiso para editar este Evento.")
         return redirect('event_detail', pk=pk)
     
+    if event.is_finished:
+        messages.error(request, "No se puede editar un Evento finalizado.")
+        return redirect('event_detail', pk=pk)
+    
     image.delete()
     messages.success(request, "Imagen eliminada con éxito.")
     return redirect('edit_event', pk=pk)
@@ -325,6 +341,10 @@ def delete_event(request, pk):
         messages.error(request, "No tienes permiso para eliminar este Evento.")
         return redirect('event_detail', pk=pk)
     
+    if event.is_finished:
+        messages.error(request, "No se puede eliminar un Evento finalizado.")
+        return redirect('event_detail', pk=pk)
+    
     if request.method == 'POST':
         event_title = event.title
         event.delete()
@@ -332,6 +352,26 @@ def delete_event(request, pk):
         return redirect('home')
     
     return redirect('event_detail', pk=pk)
+
+#   --- FINALIZAR EVENTO
+@login_required
+def finish_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    
+    if event.creator != request.user:
+        messages.error(request, "No tienes permiso para finalizar este Evento.")
+        return redirect('event_detail', pk=pk)
+    
+    if event.is_finished:
+        messages.error(request, "No se puede finalizar un Evento ya finalizado.")
+        return redirect('event_detail', pk=pk)
+        
+    if request.method == "POST":
+        event.is_finished = True
+        event.save()
+        messages.success(request, f'El Evento {event.title} ha sido finalizado.')
+        
+    return redirect('event_detail',pk=pk)
 
 #   --------------------------------------------------------
 
