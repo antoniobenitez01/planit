@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-b*8sh!+$i8*g4wp54p7wt=6iu&f+zsxdo)envgcvah-(s8tpu$
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True                                        # / ! \ DEBUG = FALSE   SOLO PARA TESTEAR PÁGINA 404
+DEBUG = False                                        # / ! \ DEBUG = FALSE   SOLO PARA TESTEAR PÁGINA 404
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']     # / ! \                 SOLO PARA TESTEAR PÁGINA 404
 
 
